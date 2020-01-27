@@ -1,0 +1,83 @@
+#example utl script covering vast majority of rules
+
+#TABLE DECLARATIONS
+
+#coluna declarada da maneira "clássica", por extenso
+Column c1=  "colunaVaiSerImportada" : "v1" , "v2" , "v3", "v4"
+
+#item criada atraves de um string
+Item i1= "souItem"
+
+#tabela criada com 4 colunas, uma coluna criada por extenso, uma coluna sem itens (apenas tem nome),
+#uma coluna importada, tem um novo nome e os itens da coluna referenciada,
+#e uma coluna criada por extenso, atraves de uma mistura de strings e itens ja definidos
+Table t1 = [ "col1" : "1" , "2", "3", "4" ; "colVazia" ; "colunaImportada" -> c1 ; "col4" : "itemNormal", i1 ] 
+print t1
+
+#2 tabelas criadas para posterior junçao das mesmas
+Table t3 = [ "nome" : "mario" , "maria", "jose" ; "numero" : "1", "2", "3" ]
+Table t4 = [ "indices" : "1" , "2", "5" ; "nome" : "ines" , "carla", "spanishInquisition" ]
+Table t5 = t3.join(t4)
+print t5
+
+#COLUMN DECLARATIONS
+
+#coluna criada atraves de um tabela com acesso pelo nome da coluna (fica com todos os itens)
+Column c2= t4.col("nome")
+print c2
+#coluna criada atraves de um tabela com acesso pelo indice da coluna, e selecionando um range de itens
+Column c3=t1.col(0).item(0-2)
+print c3
+
+#ITEM DECLARATIONS
+
+#obter nome da coluna
+Item i2= t1.col(1).name
+print i2
+
+#item criado atraves de um tabela com acesso pelo indice da coluna, e selecionando o indice do item
+Item i3=t1.col(0).item(0)
+print i3
+
+#VARIABLE ASSIGNMENTS
+
+#simple assignments just to show it works
+
+t1= [ "nome" : "mario" , "maria", "jose" ; "numero" : "1", "2", "3" ]
+print t1
+
+#item assign, atraves de um item q ja existia
+i3=i2
+print i3
+
+#OPERATIONS
+
+#em java n podemos eliminar completamente uma variavel por isso retiramos apenas o seu conteudo
+#delete table
+t3.del
+print t3
+
+#delete column (from table)
+t1.col("nome").del
+print t1
+
+#deleteItem (from table)
+t4.col("nome").item(0-1).del #delete 2 items
+print t4
+
+#putColumn
+t4.put(c2,c1)
+print t4
+
+#putItem
+t4.col("nome").put("eu")
+print t4
+
+#alterItem
+t4.col("nome").item("eu").alter("tu")
+print t4
+
+#exportCsv
+Table t6= [ "nome" : "mario" , "maria", "jose" ; "numero" : "1", "2", "3" ]
+print t6
+t6.csv("file1")
